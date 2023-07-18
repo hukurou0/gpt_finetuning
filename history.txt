@@ -1,0 +1,4 @@
+finetuning
+training_file_id = file-X1q3tY0Qt4MzZDkvUsexSfzF
+FineTune_id = ft-MyHLBbnhhKZk1BNJyDBXDmog
+
