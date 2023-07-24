@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+import funcs_copy
 
 #テーマを決めます。
 #テーマの種類は、sg.preview_all_look_and_feel_themes()で確認できます。
@@ -19,7 +20,7 @@ tab_upload_file_layout =  [
     [sg.Input(key='train_file_path')],
     [sg.Text('検証データのファイルパス')],
     [sg.Input(key='val_file_path')],
-    [sg.Button('upload')]
+    [sg.Button('upload', key='file_upload')]
 ]
 
 radio_train_dic = {
@@ -55,6 +56,19 @@ while True:
     event,values=window.read()
     if event == sg.WIN_CLOSED:
         break
+    elif event == "file_upload":
+        path = values['train_file_path']
+        try:
+            if path:
+                funcs_copy.upload_file_train(path)
+            path = values['val_file_path']
+            if path:
+                funcs_copy.upload_file_val(path)
+            sg.popup('アップロード完了しました')
+        except Exception as e:
+            sg.popup(f'{e}')
+        window['train_file_path']. Update('')
+        window['val_file_path']. Update('')
 
 #画面を閉じます。
 window.close()
