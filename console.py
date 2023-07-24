@@ -1,8 +1,12 @@
+# カレントディレクトリをconsole.pyのある場所に移動
+import os
+script_path = os.path.abspath(__file__)
+script_dir = os.path.dirname(script_path)
+os.chdir(script_dir)
+
 import PySimpleGUI as sg
 import funcs_copy
 
-#テーマを決めます。
-#テーマの種類は、sg.preview_all_look_and_feel_themes()で確認できます。
 sg.theme("DarkBlue")
 
 tab_file_layout =  [
@@ -34,14 +38,14 @@ radio_val_dic = {
 
 tab_create_model_layout = [
     [sg.Text('トレーニングデータ')],
-    [sg.Radio(item[1], key=item[0], group_id='0') for item in radio_train_dic.items()],
+    [sg.Radio('file-path', key='-1-', group_id='0', default=True), sg.Radio('file-id', key='-2-', group_id='0')],
     [sg.Input(key='train_file')],
     [sg.Text('検証データ')],
-    [sg.Radio(item[1], key=item[0], group_id='0') for item in radio_val_dic.items()],
+    [sg.Radio('file-path', key='-1-', group_id='1', default=True), sg.Radio('file-id', key='-2-', group_id='1')],
     [sg.Input(key='val_file')],
     [sg.Text('ベースモデル')],
     [sg.Combo(values=['ada', 'babbage','curie','davinci'], size=(20, 1), key='MODEL')],
-    [sg.Button('create')]
+    [sg.Button('create',key='create_model')]
 ]
 
 #表示する画面の設定をします。
@@ -56,6 +60,7 @@ while True:
     event,values=window.read()
     if event == sg.WIN_CLOSED:
         break
+    
     elif event == "file_upload":
         path = values['train_file_path']
         try:
@@ -69,6 +74,9 @@ while True:
             sg.popup(f'{e}')
         window['train_file_path']. Update('')
         window['val_file_path']. Update('')
+        
+    elif event == "create_model":
+        sg.popup('アップロード完了しました')
 
 #画面を閉じます。
 window.close()
