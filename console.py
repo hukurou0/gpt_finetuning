@@ -27,35 +27,25 @@ tab_upload_file_layout =  [
     [sg.Button('upload', key='file_upload')]
 ]
 
-radio_train_dic = {
-    '-1-': 'file_path',
-    '-2-': 'file_id',
-}
-radio_val_dic = {
-    '-1-': 'file_path',
-    '-2-': 'file_id',
-}
-
 tab_create_model_layout = [
     [sg.Text('トレーニングデータ')],
-    [sg.Radio('file-path', key='-1-', group_id='0', default=True), sg.Radio('file-id', key='-2-', group_id='0')],
+    [sg.Radio('file-path', key='-is_file_path0-', group_id='0', default=True), sg.Radio('file-id', key='-is_file_id0-', group_id='0')],
     [sg.Input(key='train_file')],
     [sg.Text('検証データ')],
-    [sg.Radio('file-path', key='-1-', group_id='1', default=True), sg.Radio('file-id', key='-2-', group_id='1')],
+    [sg.Radio('file-path', key='-is_file_path1-', group_id='1', default=True), sg.Radio('file-id', key='-is_file_id1-', group_id='1')],
     [sg.Input(key='val_file')],
     [sg.Text('ベースモデル')],
     [sg.Combo(values=['ada', 'babbage','curie','davinci'], size=(20, 1), key='MODEL')],
     [sg.Button('create',key='create_model')]
 ]
 
-#表示する画面の設定をします。
 layout= [
         [sg.TabGroup([[sg.Tab('file',tab_file_layout), sg.Tab('model', tab_model_layout)]]), sg.TabGroup([[sg.Tab('uploadfile',tab_upload_file_layout), sg.Tab('create_model', tab_create_model_layout)]])],
         ]
 
 window=sg.Window("GPTfine_tuning",layout)
 
-#無限ループで画面を表示させます。×ボタンで無限ループを抜けます。
+
 while True:
     event,values=window.read()
     if event == sg.WIN_CLOSED:
@@ -76,7 +66,10 @@ while True:
         window['val_file_path']. Update('')
         
     elif event == "create_model":
-        sg.popup('アップロード完了しました')
+        try:
+            funcs_copy.create_model(values)
+        except Exception as e:
+            sg.popup(f'{e}')
 
 #画面を閉じます。
 window.close()
